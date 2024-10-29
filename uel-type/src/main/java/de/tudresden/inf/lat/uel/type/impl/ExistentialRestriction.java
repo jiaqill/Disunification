@@ -100,6 +100,4 @@ public class ExistentialRestriction implements Atom {
 		return "some " + role + " " + child;
 	}
 
-	public boolean isTop() {return false;}
-
 }

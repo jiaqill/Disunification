@@ -2,6 +2,7 @@ package de.tudresden.inf.lat.uel.type.api;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import de.tudresden.inf.lat.uel.type.impl.Unifier;
 
@@ -40,13 +41,6 @@ public interface UnificationAlgorithm {
 	List<Entry<String, String>> getInfo();
 
 	/**
-	 * Returns the input to be used to compute the next unifier.
-	 * 
-	 * @return the input to be used to compute the next unifier
-	 */
-	Goal getGoal();
-
-	/**
 	 * Returns the result of the last computation.
 	 * 
 	 * @return the result of the last computation
@@ -55,5 +49,9 @@ public interface UnificationAlgorithm {
 	 *             if invoked before the first computation
 	 */
 	Unifier getUnifier();
+
+	void setCallbackPreprocessing(Runnable r);
+
+	void setShortFormMap(Function<String, String> map);
 
 }

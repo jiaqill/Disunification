@@ -93,13 +93,4 @@ public class ConceptName implements Atom {
 		return conceptNameId.toString() + " {" + (isVariable() ? "v" : "c") + "}";
 	}
 
-	public boolean isTop() {
-		if(conceptNameId == 0){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
 }

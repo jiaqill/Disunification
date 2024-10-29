@@ -57,6 +57,4 @@ public interface Atom {
 	 *         restriction and is not ground
 	 */
 	boolean isVariable();
-
-	boolean isTop();
 }
