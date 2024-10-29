@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- @author Julian Mendez -->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>uel-standalone</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>uel-ui</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.owlapi</groupId>
+			<artifactId>owlapi-osgidistribution</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.sat4j</groupId>
+			<artifactId>org.ow2.sat4j.maxsat</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<parent>
+		<groupId>de.tu-dresden.inf.lat.uel</groupId>
+		<artifactId>uel-parent</artifactId>
+		<version>1.4.1</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<mainClass>de.tudresden.inf.lat.uel.plugin.main.UelStandalone</mainClass>
+
+		<import.package>javax.accessibility,javax.swing,javax.swing.border,org.osgi.framework,org.protege.editor.core.ui.workspace</import.package>
+	</properties>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+
+					<execution>
+						<id>standalone</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<finalName>uel</finalName>
+							<minimizeJar>false</minimizeJar>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Bundle-SymbolicName>${project.groupId};singleton:=true</Bundle-SymbolicName>
+										<Bundle-Name>UEL</Bundle-Name>
+										<Bundle-Version>${project.version}</Bundle-Version>
+										<Bundle-Category>protege</Bundle-Category>
+										<Bundle-Description>UEL standalone</Bundle-Description>
+										<Bundle-Vendor>Chair of Automata Theory - TU Dresden</Bundle-Vendor>
+										<Bundle-DocURL>https://tu-dresden.de/ing/informatik/thi/lat</Bundle-DocURL>
+										<Bundle-ClassPath>.</Bundle-ClassPath>
+										<Import-Package>${import.package}</Import-Package>
+										<Main-Class>${mainClass}</Main-Class>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+							<filters>
+								<filter>
+									<artifact>*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<name>UEL Standalone</name>
+
+</project>
+

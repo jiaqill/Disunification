@@ -1,0 +1,192 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- @author Julian Mendez -->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>uel-plugin</artifactId>
+	<packaging>bundle</packaging>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>uel-protege</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.sat4j</groupId>
+			<artifactId>org.ow2.sat4j.maxsat</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<parent>
+		<groupId>de.tu-dresden.inf.lat.uel</groupId>
+		<artifactId>uel-parent</artifactId>
+		<version>1.4.1</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<mainClass>de.tudresden.inf.lat.uel.plugin.main.UelStandalone</mainClass>
+
+		<guava.package>com.google.common.base;version="[18,33)"</guava.package>
+
+		<bundle.activator>org.protege.editor.core.plugin.DefaultPluginActivator</bundle.activator>
+
+		<bundle.classpath>
+			.,
+			lib/org/ow2/sat4j/org.ow2.sat4j.core/${sat4j.version}/org.ow2.sat4j.core-${sat4j.version}.jar,
+			lib/org/ow2/sat4j/org.ow2.sat4j.pb/${sat4j.version}/org.ow2.sat4j.pb-${sat4j.version}.jar,
+			lib/org/ow2/sat4j/org.ow2.sat4j.maxsat/${sat4j.version}/org.ow2.sat4j.maxsat-${sat4j.version}.jar,
+			lib/commons-cli/commons-cli/${commonscli.version}/commons-cli-${commonscli.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-core/${jackson.version}/jackson-core-${jackson.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-annotations/${jackson.version}/jackson-annotations-${jackson.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-databind/${jackson.version}/jackson-databind-${jackson.version}.jar
+		</bundle.classpath>
+
+		<import.package>
+			org.protege.editor.core.plugin,
+			org.w3c.dom,
+			org.xml.sax,
+			${guava.package},
+			javax.swing,
+			javax.swing.border,
+			javax.imageio,
+			javax.xml.datatype,
+			javax.xml.namespace,
+			javax.xml.parsers,
+			javax.xml.transform,
+			javax.xml.transform.dom,
+			javax.xml.transform.stream,
+			javax.accessibility,
+			org.osgi.framework
+		</import.package>
+
+		<require.bundle>
+			org.eclipse.equinox.registry,
+			org.eclipse.equinox.common,
+			org.protege.editor.core.application,
+			org.protege.editor.owl,
+			org.semanticweb.owl.owlapi
+		</require.bundle>
+
+		<include.resource>
+			{maven-resources}, {maven-dependencies},
+			@uel-type-${project.version}.jar,
+			@uel-asp-${project.version}.jar,
+			@uel-rule-${project.version}.jar,
+			@uel-sat-${project.version}.jar,
+			@uel-core-${project.version}.jar,
+			@uel-ui-${project.version}.jar,
+			@uel-protege-${project.version}.jar,
+			@util-map-${util.version}.jar,
+			lib/org/ow2/sat4j/org.ow2.sat4j.core/${sat4j.version}/org.ow2.sat4j.core-${sat4j.version}.jar=org.ow2.sat4j.core-${sat4j.version}.jar,
+			lib/org/ow2/sat4j/org.ow2.sat4j.pb/${sat4j.version}/org.ow2.sat4j.pb-${sat4j.version}.jar=org.ow2.sat4j.pb-${sat4j.version}.jar,
+			lib/org/ow2/sat4j/org.ow2.sat4j.maxsat/${sat4j.version}/org.ow2.sat4j.maxsat-${sat4j.version}.jar=org.ow2.sat4j.maxsat-${sat4j.version}.jar,
+			lib/commons-cli/commons-cli/${commonscli.version}/commons-cli-${commonscli.version}.jar=commons-cli-${commonscli.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-core/${jackson.version}/jackson-core-${jackson.version}.jar=jackson-core-${jackson.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-annotations/${jackson.version}/jackson-annotations-${jackson.version}.jar=jackson-annotations-${jackson.version}.jar,
+			lib/com/fasterxml/jackson/core/jackson-databind/${jackson.version}/jackson-databind-${jackson.version}.jar=jackson-databind-${jackson.version}.jar,
+			LICENSE.txt=../docs/LICENSE.txt,
+			COPYING.txt=../docs/COPYING.txt,
+			COPYING-LESSER.txt=../docs/COPYING-LESSER.txt
+		</include.resource>
+
+	</properties>
+
+	<build>
+
+		<finalName>${project.groupId}-${project.version}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+
+					<execution>
+						<id>create-library-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<formats>
+								<format>jar</format>
+							</formats>
+							<descriptors>
+								<descriptor>${basedir}/src/assembly/sources.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>create-library-javadoc</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>${basedir}/src/assembly/javadoc.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.groupId};singleton:=true</Bundle-SymbolicName>
+						<Bundle-Name>UEL Plug-in</Bundle-Name>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Bundle-Activator>${bundle.activator}</Bundle-Activator>
+						<Bundle-Category>protege</Bundle-Category>
+						<Bundle-Description>UEL Protege plug-in</Bundle-Description>
+						<Bundle-Vendor>Chair of Automata Theory - TU Dresden</Bundle-Vendor>
+						<Bundle-DocURL>https://tu-dresden.de/ing/informatik/thi/lat</Bundle-DocURL>
+						<Bundle-ClassPath>${bundle.classpath}</Bundle-ClassPath>
+						<Import-Package>${import.package}</Import-Package>
+						<Require-Bundle>${require.bundle}</Require-Bundle>
+						<Include-Resource>${include.resource}</Include-Resource>
+					</instructions>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<name>UEL Protege plug-in</name>
+
+</project>
+
